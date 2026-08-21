@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import {
   RotateCcw,
+  RotateCw,
   ZoomIn,
   ZoomOut,
   Maximize2,
@@ -13,7 +14,6 @@ import {
   Layers,
   Sparkles,
   Move,
-  RotateCw,
   Sliders,
   Grid,
   Check,
@@ -22,7 +22,16 @@ import {
   RefreshCw,
   FlipHorizontal,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  PenTool,
+  Paintbrush,
+  Sparkle,
+  Droplets,
+  CircleDot,
+  Undo2,
+  Redo2,
+  Flame,
+  Palette
 } from "lucide-react";
 import { getMotifById } from "../data/motifs";
 import { MATERIALS } from "../data/content";
@@ -36,12 +45,16 @@ export default function Canvas({
   setSelectedId,
   groundId,
   setGroundId,
-  mode, // 'select' | 'brush'
+  mode, // 'select' | 'brush' | 'eraser'
   setMode,
   activeBrush,
+  setActiveBrush,
   strokeColor,
+  setStrokeColor,
   strokeWidth,
+  setStrokeWidth,
   strokeOpacity,
+  setStrokeOpacity,
   isolationFilter = "all",
   onRecordMilestone,
   svgRef,
@@ -52,6 +65,9 @@ export default function Canvas({
   const [zoom, setZoom] = useState(1);
   const [snapToGrid, setSnapToGrid] = useState(false);
   const [activeHandle, setActiveHandle] = useState(null);
+  const [redoStack, setRedoStack] = useState([]);
+  const [eraserRadius, setEraserRadius] = useState(16);
+
   const isDrawing = useRef(false);
   const currentStroke = useRef(null);
 
@@ -63,7 +79,7 @@ export default function Canvas({
     setElements((prev) => prev.map((el) => (el.id === id ? { ...el, ...updates } : el)));
   }, [setElements]);
 
-  // Convert Screen (clientX, clientY) to exact SVG ViewBox Coordinates (0..800, 0..550)
+  // Convert Screen Coordinates (clientX, clientY) to exact SVG ViewBox (0..800, 0..550)
   const getSvgPoint = useCallback((clientX, clientY) => {
     const svg = svgRef.current;
     if (!svg) return { x: 400, y: 275, pctX: 50, pctY: 50 };
@@ -91,18 +107,50 @@ export default function Canvas({
     }
   }, [svgRef]);
 
+  // Undo / Redo for Stroke Engine
+  const handleUndo = useCallback(() => {
+    if (strokes.length === 0) return;
+    const last = strokes[strokes.length - 1];
+    setRedoStack((prev) => [...prev, last]);
+    setStrokes((prev) => prev.slice(0, -1));
+    if (onRecordMilestone) onRecordMilestone("Undo stroke");
+  }, [strokes, setStrokes, onRecordMilestone]);
+
+  const handleRedo = useCallback(() => {
+    if (redoStack.length === 0) return;
+    const item = redoStack[redoStack.length - 1];
+    setRedoStack((prev) => prev.slice(0, -1));
+    setStrokes((prev) => [...prev, item]);
+    if (onRecordMilestone) onRecordMilestone("Redo stroke");
+  }, [redoStack, setStrokes, onRecordMilestone]);
+
   // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) return;
 
-      if ((e.key === "Delete" || e.key === "Backspace") && selectedId) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z")) {
+        e.preventDefault();
+        if (e.shiftKey) {
+          handleRedo();
+        } else {
+          handleUndo();
+        }
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "y" || e.key === "Y")) {
+        e.preventDefault();
+        handleRedo();
+      } else if ((e.ctrlKey || e.metaKey) && (e.key === "d" || e.key === "D") && selectedId) {
+        e.preventDefault();
+        duplicateElement();
+      } else if ((e.key === "Delete" || e.key === "Backspace") && selectedId) {
         e.preventDefault();
         deleteElement();
       } else if (e.key === "v" || e.key === "V") {
         setMode("select");
       } else if (e.key === "b" || e.key === "B") {
         setMode("brush");
+      } else if (e.key === "e" || e.key === "E") {
+        setMode("eraser");
       } else if (e.key === "Escape") {
         setSelectedId(null);
       } else if (selectedId && selectedEl) {
@@ -129,12 +177,13 @@ export default function Canvas({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [selectedId, selectedEl, mode, updateElement]);
+  }, [selectedId, selectedEl, mode, updateElement, handleUndo, handleRedo]);
 
   // Clear Canvas
   const handleStartBlank = () => {
     setElements([]);
     setStrokes([]);
+    setRedoStack([]);
     setSelectedId(null);
     if (onRecordMilestone) onRecordMilestone("Started Blank Canvas");
   };
@@ -198,7 +247,18 @@ export default function Canvas({
     updateElement(selectedEl.id, { zIndex: Math.max(0, minZ - 1) });
   };
 
-  // --- FREEHAND BRUSH ENGINE ---
+  // --- ERASE STROKE COLLISION HELPER ---
+  const eraseStrokesAtPoint = (pt) => {
+    setStrokes((prevStrokes) => {
+      return prevStrokes.filter((stroke) => {
+        if (!stroke.points || stroke.points.length === 0) return false;
+        const hit = stroke.points.some((p) => Math.hypot(p.x - pt.x, p.y - pt.y) < eraserRadius + (stroke.width || 4) / 2);
+        return !hit;
+      });
+    });
+  };
+
+  // --- FREEHAND BRUSH & ERASER ENGINE ---
   const handlePointerDownCanvas = (ev) => {
     if (mode === "brush") {
       ev.preventDefault();
@@ -215,6 +275,12 @@ export default function Canvas({
         points: [{ x: pt.x, y: pt.y, pressure }]
       };
       setStrokes((prev) => [...prev, currentStroke.current]);
+      setRedoStack([]);
+    } else if (mode === "eraser") {
+      ev.preventDefault();
+      isDrawing.current = true;
+      const pt = getSvgPoint(ev.clientX, ev.clientY);
+      eraseStrokesAtPoint(pt);
     } else {
       // In select mode: clicking empty canvas deselects
       if (ev.target.tagName === "svg" || ev.target.classList.contains("canvas-ground-rect")) {
@@ -224,21 +290,27 @@ export default function Canvas({
   };
 
   const handlePointerMoveCanvas = (ev) => {
-    if (mode === "brush" && isDrawing.current && currentStroke.current) {
+    if (!isDrawing.current) return;
+
+    if (mode === "brush" && currentStroke.current) {
       ev.preventDefault();
       const pt = getSvgPoint(ev.clientX, ev.clientY);
       const pressure = ev.pressure > 0 ? ev.pressure : 0.6;
 
       currentStroke.current.points.push({ x: pt.x, y: pt.y, pressure });
       setStrokes((prev) => [...prev.slice(0, -1), { ...currentStroke.current }]);
+    } else if (mode === "eraser") {
+      ev.preventDefault();
+      const pt = getSvgPoint(ev.clientX, ev.clientY);
+      eraseStrokesAtPoint(pt);
     }
   };
 
   const handlePointerUpCanvas = () => {
-    if (mode === "brush" && isDrawing.current) {
+    if (isDrawing.current) {
       isDrawing.current = false;
-      if (onRecordMilestone && currentStroke.current?.points?.length > 2) {
-        onRecordMilestone(`Added ${activeBrush} brushwork`);
+      if (mode === "brush" && onRecordMilestone && currentStroke.current?.points?.length > 2) {
+        onRecordMilestone(`Added ${activeBrush} stroke`);
       }
       currentStroke.current = null;
     }
@@ -359,13 +431,27 @@ export default function Canvas({
     );
   };
 
+  // Natural Mineral Pigment Swatches
+  const PIGMENT_PALETTE = [
+    { name: "Madder Crimson", hex: "#82221b" },
+    { name: "Indigo Blue", hex: "#173b5c" },
+    { name: "Turmeric Yellow", hex: "#d89c28" },
+    { name: "Geru Red Mud", hex: "#9e432a" },
+    { name: "Lampblack (Kajal)", hex: "#1c1813" },
+    { name: "Rice Paste White", hex: "#fbf6ec" },
+    { name: "Malachite Green", hex: "#1b4c38" },
+    { name: "Lapis Lazuli", hex: "#142d4a" },
+    { name: "22k Gold Foil", hex: "#c9a96c" },
+    { name: "Chalk Lime", hex: "#ebd9b6" }
+  ];
+
   return (
-    <div className="canvas-container">
+    <div className="canvas-container apple-procreate-studio">
       {/* Top Action Bar */}
       <div className="canvas-header-bar">
         {/* Support Ground Selector */}
         <div className="ground-selector">
-          <span className="ground-label">SUPPORT GROUND:</span>
+          <span className="ground-label">SUPPORT:</span>
           <select value={groundId} onChange={(e) => setGroundId(e.target.value)}>
             {MATERIALS.map((m) => (
               <option key={m.id} value={m.id}>
@@ -375,7 +461,7 @@ export default function Canvas({
           </select>
         </div>
 
-        {/* Quick Design Action Buttons */}
+        {/* Quick Actions */}
         <div className="canvas-quick-actions">
           <button className="tool-btn master-cat-btn" onClick={onOpenFullCatalog} title="Browse All 40+ Indian Painting Motifs">
             <Sparkles size={12} color="#b38938" /> <b>BROWSE ALL MOTIFS</b>
@@ -407,6 +493,197 @@ export default function Canvas({
         </div>
       </div>
 
+      {/* =========================================================================
+          APPLE-GRADE FLOATING GLASSMORPHISM DRAWING ISLAND TOOLBAR
+          ========================================================================= */}
+      <div className="apple-drawing-island">
+        {/* Tool Selectors */}
+        <div className="island-tools-group">
+          <button
+            className={`island-tool-btn ${mode === "select" ? "active" : ""}`}
+            onClick={() => setMode("select")}
+            title="Select & Move Tool (V)"
+          >
+            <Move size={15} />
+            <span>Select</span>
+          </button>
+
+          <button
+            className={`island-tool-btn ${mode === "brush" && activeBrush === "kalam" ? "active" : ""}`}
+            onClick={() => {
+              setMode("brush");
+              setActiveBrush("kalam");
+            }}
+            title="Bamboo Kalam Reed Pen (B)"
+          >
+            <PenTool size={15} />
+            <span>Kalam</span>
+          </button>
+
+          <button
+            className={`island-tool-btn ${mode === "brush" && activeBrush === "squirrel" ? "active" : ""}`}
+            onClick={() => {
+              setMode("brush");
+              setActiveBrush("squirrel");
+            }}
+            title="Squirrel Hair Miniature Brush"
+          >
+            <Paintbrush size={15} />
+            <span>Brush</span>
+          </button>
+
+          <button
+            className={`island-tool-btn ${mode === "brush" && activeBrush === "rice_paste" ? "active" : ""}`}
+            onClick={() => {
+              setMode("brush");
+              setActiveBrush("rice_paste");
+              setStrokeColor("#fbf6ec");
+            }}
+            title="Rice Paste White Fine Nib (Chawal Pittha)"
+          >
+            <Sparkle size={15} />
+            <span>Rice Nib</span>
+          </button>
+
+          <button
+            className={`island-tool-btn ${mode === "brush" && activeBrush === "wash" ? "active" : ""}`}
+            onClick={() => {
+              setMode("brush");
+              setActiveBrush("wash");
+              setStrokeOpacity(0.45);
+              setStrokeWidth(14);
+            }}
+            title="Dye Watercolor Wash"
+          >
+            <Droplets size={15} />
+            <span>Glaze</span>
+          </button>
+
+          <button
+            className={`island-tool-btn ${mode === "brush" && activeBrush === "stippler" ? "active" : ""}`}
+            onClick={() => {
+              setMode("brush");
+              setActiveBrush("stippler");
+            }}
+            title="Gond & Bhil Clay Dot Stippler"
+          >
+            <CircleDot size={15} />
+            <span>Dotter</span>
+          </button>
+
+          <button
+            className={`island-tool-btn ${mode === "brush" && activeBrush === "gold_gesso" ? "active" : ""}`}
+            onClick={() => {
+              setMode("brush");
+              setActiveBrush("gold_gesso");
+              setStrokeColor("#c9a96c");
+            }}
+            title="22k Gold Foil Leaf"
+          >
+            <Flame size={15} color="#c9a96c" />
+            <span>Gold 22k</span>
+          </button>
+
+          <button
+            className={`island-tool-btn eraser-btn ${mode === "eraser" ? "active" : ""}`}
+            onClick={() => setMode("eraser")}
+            title="Precision Stroke Eraser (E)"
+          >
+            <Eraser size={15} />
+            <span>Eraser</span>
+          </button>
+        </div>
+
+        {/* Separator */}
+        <div className="island-divider" />
+
+        {/* Size Slider with Live Preview */}
+        <div className="island-slider-unit" title={`Stroke Size: ${strokeWidth}px`}>
+          <div className="size-preview-dot" style={{ width: Math.max(4, Math.min(22, strokeWidth)), height: Math.max(4, Math.min(22, strokeWidth)), background: mode === "eraser" ? "#b83324" : strokeColor }} />
+          <input
+            type="range"
+            min="1"
+            max="36"
+            step="1"
+            value={strokeWidth}
+            onChange={(e) => setStrokeWidth(parseInt(e.target.value))}
+            className="apple-slider"
+          />
+          <span className="slider-label">{strokeWidth}px</span>
+        </div>
+
+        {/* Separator */}
+        <div className="island-divider" />
+
+        {/* Color Palette Bubbles */}
+        <div className="island-color-bubbles">
+          {PIGMENT_PALETTE.map((p, idx) => (
+            <button
+              key={idx}
+              className={`apple-color-bubble ${strokeColor === p.hex && mode !== "eraser" ? "active" : ""}`}
+              style={{ background: p.hex }}
+              onClick={() => {
+                setStrokeColor(p.hex);
+                if (mode === "eraser") setMode("brush");
+                if (selectedId) {
+                  updateElement(selectedId, { color: p.hex });
+                }
+              }}
+              title={p.name}
+            />
+          ))}
+          {/* Custom Color Input */}
+          <label className="apple-color-custom" title="Custom Pigment Color">
+            <Palette size={12} color="#8c7756" />
+            <input
+              type="color"
+              value={strokeColor}
+              onChange={(e) => {
+                setStrokeColor(e.target.value);
+                if (selectedId) updateElement(selectedId, { color: e.target.value });
+              }}
+            />
+          </label>
+        </div>
+
+        {/* Separator */}
+        <div className="island-divider" />
+
+        {/* Undo / Redo & Clear Actions */}
+        <div className="island-history-group">
+          <button
+            className="island-action-btn"
+            onClick={handleUndo}
+            disabled={strokes.length === 0}
+            title="Undo Stroke (Ctrl+Z)"
+          >
+            <Undo2 size={14} />
+          </button>
+          <button
+            className="island-action-btn"
+            onClick={handleRedo}
+            disabled={redoStack.length === 0}
+            title="Redo Stroke (Ctrl+Y)"
+          >
+            <Redo2 size={14} />
+          </button>
+          <button
+            className="island-action-btn clear-btn"
+            onClick={() => {
+              if (strokes.length > 0) {
+                setRedoStack(strokes);
+                setStrokes([]);
+                if (onRecordMilestone) onRecordMilestone("Cleared strokes");
+              }
+            }}
+            disabled={strokes.length === 0}
+            title="Clear all strokes"
+          >
+            <Trash2 size={14} />
+          </button>
+        </div>
+      </div>
+
       {/* SVG Canvas Area */}
       <div className="canvas-viewport" style={{ overflow: zoom > 1 ? "auto" : "hidden" }}>
         <div
@@ -416,7 +693,7 @@ export default function Canvas({
           <svg
             ref={svgRef}
             viewBox="0 0 800 550"
-            className="main-svg-stage"
+            className={`main-svg-stage ${mode === "brush" ? "brush-cursor" : mode === "eraser" ? "eraser-cursor" : "select-cursor"}`}
             onPointerDown={handlePointerDownCanvas}
             onPointerMove={handlePointerMoveCanvas}
             onPointerUp={handlePointerUpCanvas}
@@ -430,6 +707,7 @@ export default function Canvas({
                 handmade_paper: "#eee2cb",
                 gold_panel: "#2d2417",
                 talapatra: "#d8be8d",
+                temple_fresco: "#ece2cb",
                 khadi: "#f5eee0",
                 mud: "#7b3829",
                 paper: "#eee2cb",
@@ -610,9 +888,9 @@ export default function Canvas({
             <div className="empty-canvas-prompt">
               <Sparkles size={32} color="#b38938" />
               <h3>Blank Fusion Canvas Ready</h3>
-              <p>Click any motif from the shelves on the left or click <b>"BROWSE ALL MOTIFS"</b> to start building your fusion masterwork.</p>
+              <p>Click any motif from the shelves on the left or use the <b>Apple Drawing Island</b> to paint with natural mineral brushes.</p>
               <button className="gold-btn open-cat-btn" onClick={onOpenFullCatalog}>
-                <Plus size={13} /> BROWSE &amp; ADD MOTIFS
+                <Plus size={13} /> BROWSE 40+ MOTIFS
               </button>
             </div>
           )}
@@ -695,8 +973,8 @@ export default function Canvas({
       {/* Canvas Footer Bar */}
       <div className="canvas-footer-bar">
         <span>CANVAS: 800 × 550 PX · {selectedMaterial.name.toUpperCase()}</span>
-        <span>{elements.length} ACTIVE MOTIFS · {strokes.length} BRUSH STROKES</span>
-        <span>DRAG ANYWHERE TO MOVE · USE ARROW KEYS TO NUDGE · DEL TO REMOVE</span>
+        <span>{elements.length} MOTIFS · {strokes.length} BRUSH STROKES</span>
+        <span>SHORTCUTS: V = SELECT, B = BRUSH, E = ERASER, CTRL+Z = UNDO</span>
       </div>
     </div>
   );

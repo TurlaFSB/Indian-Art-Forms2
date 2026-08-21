@@ -664,9 +664,13 @@ export default function App() {
                     mode={canvasMode}
                     setMode={setCanvasMode}
                     activeBrush={activeBrush}
+                    setActiveBrush={setActiveBrush}
                     strokeColor={strokeColor}
+                    setStrokeColor={setStrokeColor}
                     strokeWidth={strokeWidth}
+                    setStrokeWidth={setStrokeWidth}
                     strokeOpacity={strokeOpacity}
+                    setStrokeOpacity={setStrokeOpacity}
                     isolationFilter={isolationFilter}
                     onRecordMilestone={recordMilestone}
                     svgRef={svgRef}

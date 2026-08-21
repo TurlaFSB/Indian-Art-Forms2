@@ -1,5 +1,5 @@
 /**
- * SYNTHESIS — Core Mathematical, Synthesis Diagnostic, Preset Library & Serialization Engine
+ * SYNTHESIS — Core Mathematical, Synthesis Diagnostic, 20 Masterpiece Preset Library & Serialization Engine
  */
 
 export const uid = () => "obj_" + Math.random().toString(36).slice(2, 9) + "_" + Date.now().toString(36);
@@ -7,12 +7,12 @@ export const uid = () => "obj_" + Math.random().toString(36).slice(2, 9) + "_" +
 export const CURATED_PRESETS = [
   {
     id: "warli_kalamkari_dance",
-    name: "Cosmic Harvest & Botanical Vine",
+    name: "01 · Cosmic Harvest & Botanical Vine (Warli × Kalamkari)",
     styleAId: "warli",
     styleBId: "kalamkari",
     concept: "Community & Collective Ritual",
-    composition: "Concentric Spiral & Radial Dance",
-    groundId: "khadi",
+    composition: "Circular Spiral & Centrifugal Dance",
+    groundId: "khadi_cloth",
     desc: "Warli centrifugal spiral dance harmonized within undulating Kalamkari lotus vines and sacred paisley borders.",
     build: (styleA, styleB) => [
       {
@@ -99,7 +99,7 @@ export const CURATED_PRESETS = [
         zIndex: 4,
         source: "Kalamkari",
         category: "symbol",
-        materialAssociation: "Myrobalan & Iron Tint",
+        materialAssociation: "Natural Alum Mordant",
         color: "#82221b",
         created: Date.now() - 20000
       },
@@ -109,7 +109,7 @@ export const CURATED_PRESETS = [
         type: "motif",
         motifId: "tarpa_dance",
         x: 50,
-        y: 54,
+        y: 52,
         s: 48,
         scaleX: 1,
         scaleY: 1,
@@ -121,30 +121,30 @@ export const CURATED_PRESETS = [
         zIndex: 5,
         source: "Warli",
         category: "figure",
-        materialAssociation: "Rice Flour Paste (Chawal Pittha)",
-        color: "#ebd9b6",
+        materialAssociation: "Chawal Pittha (Rice Paste)",
+        color: "#1c1813",
         created: Date.now() - 10000
       }
     ]
   },
   {
-    id: "madhubani_gond_forest",
-    name: "Sacred Water & Wilderness Spirit",
+    id: "madhubani_gond_wilderness",
+    name: "02 · Sacred Water & Wilderness Spirit (Madhubani × Gond)",
     styleAId: "madhubani",
     styleBId: "gond",
-    concept: "Ecology & Sacred Nature",
-    composition: "Horror Vacui & Saturated Grid",
-    groundId: "mud",
-    desc: "Mithila auspicious double-contoured Matsya fish and lotus interlaced with Gond stippled forest stag and Mahua canopy.",
+    concept: "Sacred Ecology & Botanical Harmony",
+    composition: "Continuous Horizontal Narrative Band",
+    groundId: "mud_wall",
+    desc: "Mithila ritual Matsya (Fish) and lotus fertility motifs merging with Gond sacred Mahua tree and dappled stag patterns.",
     build: (styleA, styleB) => [
       {
         id: uid(),
-        name: "Gond Sacred Mahua Tree",
+        name: "Gond Sacred Mahua Tree of Life",
         type: "motif",
         motifId: "mahua_tree",
         x: 50,
         y: 42,
-        s: 70,
+        s: 72,
         scaleX: 1,
         scaleY: 1,
         r: 0,
@@ -164,8 +164,8 @@ export const CURATED_PRESETS = [
         name: "Gond Dappled Forest Stag",
         type: "motif",
         motifId: "gond_deer",
-        x: 32,
-        y: 62,
+        x: 30,
+        y: 60,
         s: 46,
         scaleX: 1,
         scaleY: 1,
@@ -186,8 +186,8 @@ export const CURATED_PRESETS = [
         name: "Mithila Auspicious Matsya (Fish)",
         type: "motif",
         motifId: "sacred_fish",
-        x: 68,
-        y: 64,
+        x: 70,
+        y: 62,
         s: 44,
         scaleX: 1,
         scaleY: 1,
@@ -210,7 +210,7 @@ export const CURATED_PRESETS = [
         motifId: "mithila_lotus",
         x: 50,
         y: 80,
-        s: 38,
+        s: 40,
         scaleX: 1,
         scaleY: 1,
         r: 0,
@@ -228,14 +228,14 @@ export const CURATED_PRESETS = [
     ]
   },
   {
-    id: "pattachitra_thanjavur_sanctum",
-    name: "Gilded Sanctum & Temple Arch",
-    styleAId: "pattachitra",
-    styleBId: "thanjavur",
-    concept: "Mythological Cosmos & Divine Order",
+    id: "thanjavur_pattachitra_sanctum",
+    name: "03 · Gilded Sanctum & Temple Arch (Thanjavur × Pattachitra)",
+    styleAId: "thanjavur",
+    styleBId: "pattachitra",
+    concept: "Cosmic Devotion & Iconic Stillness",
     composition: "Central Icon & Hierarchical Enclosure",
-    groundId: "gold",
-    desc: "Classical Pattachitra iconographic Meenakshi-eye profile deity framed by Thanjavur high-relief 22k gilded Kirtimukha canopy.",
+    groundId: "gold_panel",
+    desc: "Classical Pattachitra profile deity framed by Thanjavur 22k gilded Kirtimukha canopy and bejeweled halo.",
     build: (styleA, styleB) => [
       {
         id: uid(),
@@ -299,18 +299,18 @@ export const CURATED_PRESETS = [
         zIndex: 3,
         source: "Thanjavur",
         category: "symbol",
-        materialAssociation: "Burma Teak Wood & Gold Leaf",
+        materialAssociation: "Jaipur Cut Glass Gemstones",
         color: "#c9a96c",
         created: Date.now() - 20000
       },
       {
         id: uid(),
-        name: "Pattachitra Lotus-Eye Deity Icon",
+        name: "Pattachitra Sacred Meenakshi Deity",
         type: "motif",
         motifId: "pattachitra_eye_deity",
         x: 50,
-        y: 54,
-        s: 44,
+        y: 55,
+        s: 46,
         scaleX: 1,
         scaleY: 1,
         r: 0,
@@ -321,96 +321,52 @@ export const CURATED_PRESETS = [
         zIndex: 4,
         source: "Pattachitra",
         category: "figure",
-        materialAssociation: "Hingula Vermilion & Lampblack",
-        color: "#1c1813",
+        materialAssociation: "Hingula Vermilion & Conch Shell White",
+        color: "#8b3a2b",
         created: Date.now() - 10000
       }
     ]
   },
   {
-    id: "phad_saura_procession",
-    name: "Epic Scroll & Shamanic Ancestor",
+    id: "phad_saura_epic",
+    name: "04 · Epic Scroll & Shamanic Ancestor (Phad × Saura)",
     styleAId: "phad",
     styleBId: "saura",
-    concept: "Continuous Narrative & Time",
-    composition: "Narrative Frieze & Horizontal Procession",
-    groundId: "talapatra",
-    desc: "Rajasthani Pabuji hero on black steed alongside Saura sacred spirit house and rhythmic ancestor procession.",
+    concept: "Living Memory & Ancestral Presence",
+    composition: "Continuous Horizontal Narrative Band",
+    groundId: "handmade_paper",
+    desc: "Heroic Rajput Pabuji warrior steed meeting ancestral Saura ladder and radiating cosmic spirit house.",
     build: (styleA, styleB) => [
       {
         id: uid(),
-        name: "Saura Idital Spirit House",
+        name: "Saura Cosmic Spirit House (Anital)",
         type: "motif",
         motifId: "saura_spirit_house",
-        x: 75,
+        x: 35,
         y: 50,
         s: 64,
         scaleX: 1,
         scaleY: 1,
         r: 0,
-        opacity: 0.88,
+        opacity: 0.92,
         blendMode: "normal",
         visible: true,
         locked: false,
         zIndex: 1,
         source: "Saura",
         category: "structural",
-        materialAssociation: "Rice Powder on Red Clay Wall",
-        color: "#8b3a2b",
+        materialAssociation: "Rice Mash on Geru Mud",
+        color: "#8c2e22",
         created: Date.now() - 40000
       },
       {
         id: uid(),
-        name: "Phad Royal Chhatri Pavilion",
-        type: "motif",
-        motifId: "phad_court_pavilion",
-        x: 25,
-        y: 45,
-        s: 58,
-        scaleX: 1,
-        scaleY: 1,
-        r: 0,
-        opacity: 0.9,
-        blendMode: "normal",
-        visible: true,
-        locked: false,
-        zIndex: 2,
-        source: "Phad",
-        category: "structural",
-        materialAssociation: "Natural Stone Pigments on Khadi",
-        color: "#b83324",
-        created: Date.now() - 30000
-      },
-      {
-        id: uid(),
-        name: "Phad Epic Mare (Kesar Kalmi)",
+        name: "Phad Pabuji Heroic Steed",
         type: "motif",
         motifId: "pabuji_steed",
-        x: 48,
+        x: 70,
         y: 52,
-        s: 46,
-        scaleX: 1,
-        scaleY: 1,
-        r: 0,
-        opacity: 0.96,
-        blendMode: "normal",
-        visible: true,
-        locked: false,
-        zIndex: 3,
-        source: "Phad",
-        category: "figure",
-        materialAssociation: "Kajol Lampblack & Indigo",
-        color: "#1c1813",
-        created: Date.now() - 20000
-      },
-      {
-        id: uid(),
-        name: "Saura Linked Ancestor Line",
-        type: "motif",
-        motifId: "ancestor_procession",
-        x: 50,
-        y: 84,
-        s: 40,
+        s: 56,
         scaleX: 1,
         scaleY: 1,
         r: 0,
@@ -418,33 +374,55 @@ export const CURATED_PRESETS = [
         blendMode: "normal",
         visible: true,
         locked: false,
-        zIndex: 4,
-        source: "Saura",
+        zIndex: 2,
+        source: "Phad",
         category: "figure",
-        materialAssociation: "Tender Bamboo Nib (Kudang)",
-        color: "#ebd9b6",
-        created: Date.now() - 10000
+        materialAssociation: "Hinglu Vermilion & Indigo",
+        color: "#1c1813",
+        created: Date.now() - 30000
+      },
+      {
+        id: uid(),
+        name: "Saura Spirit Ascent Ladder",
+        type: "motif",
+        motifId: "saura_ladder",
+        x: 18,
+        y: 50,
+        s: 44,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.88,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 3,
+        source: "Saura",
+        category: "structural",
+        materialAssociation: "White Rice Paste",
+        color: "#8c2e22",
+        created: Date.now() - 20000
       }
     ]
   },
   {
-    id: "solar_mandala_mayura",
-    name: "Solar Mandala & Radiant Mayura",
+    id: "mithila_kalamkari_mandala",
+    name: "05 · Solar Mandala & Radiant Mayura (Mithila × Kalamkari)",
     styleAId: "madhubani",
     styleBId: "kalamkari",
-    concept: "Transcendence & Divine Majesty",
-    composition: "Concentric Spiral & Radial Dance",
-    groundId: "paper",
-    desc: "Mithila Kohbar cosmic radiant Sun-Moon centerpiece flanked by Kalamkari sacred Mayura peacocks and botanical scroll.",
+    concept: "Cyclical Movement & Celestial Order",
+    composition: "Radial Mandala & Orbiting Wildlife",
+    groundId: "khadi_cloth",
+    desc: "Mithila auspicious Sun-Moon mandala in Kachni hatching embraced by flowing Kalamkari sacred peacocks.",
     build: (styleA, styleB) => [
       {
         id: uid(),
-        name: "Kohbar Cosmic Sun-Moon Centerpiece",
+        name: "Mithila Auspicious Sun-Moon Mandala",
         type: "motif",
         motifId: "kohbar_sun_moon",
         x: 50,
         y: 50,
-        s: 60,
+        s: 68,
         scaleX: 1,
         scaleY: 1,
         r: 0,
@@ -455,8 +433,8 @@ export const CURATED_PRESETS = [
         zIndex: 1,
         source: "Mithila / Madhubani",
         category: "symbol",
-        materialAssociation: "Turmeric Yellow & Madder",
-        color: "#b83324",
+        materialAssociation: "Kusum & Haridra Golden Yellow",
+        color: "#d89c28",
         created: Date.now() - 40000
       },
       {
@@ -464,9 +442,9 @@ export const CURATED_PRESETS = [
         name: "Kalamkari Sacred Mayura (Left)",
         type: "motif",
         motifId: "kalamkari_peacock",
-        x: 22,
+        x: 24,
         y: 50,
-        s: 42,
+        s: 48,
         scaleX: 1,
         scaleY: 1,
         r: 10,
@@ -477,8 +455,8 @@ export const CURATED_PRESETS = [
         zIndex: 2,
         source: "Kalamkari",
         category: "figure",
-        materialAssociation: "Indigofera Tinctoria",
-        color: "#1b3b4f",
+        materialAssociation: "Indigo Blue (Neel)",
+        color: "#16453b",
         created: Date.now() - 30000
       },
       {
@@ -486,9 +464,9 @@ export const CURATED_PRESETS = [
         name: "Kalamkari Sacred Mayura (Right)",
         type: "motif",
         motifId: "kalamkari_peacock",
-        x: 78,
+        x: 76,
         y: 50,
-        s: 42,
+        s: 48,
         scaleX: -1,
         scaleY: 1,
         r: -10,
@@ -499,18 +477,30 @@ export const CURATED_PRESETS = [
         zIndex: 3,
         source: "Kalamkari",
         category: "figure",
-        materialAssociation: "Indigofera Tinctoria",
-        color: "#1b3b4f",
+        materialAssociation: "Indigo Blue (Neel)",
+        color: "#16453b",
         created: Date.now() - 20000
-      },
+      }
+    ]
+  },
+  {
+    id: "pichwai_kalighat_devotion",
+    name: "06 · Sacred Kadamba & Shaded Kali (Pichwai × Kalighat)",
+    styleAId: "pichwai",
+    styleBId: "kalighat",
+    concept: "Cosmic Devotion & Iconic Stillness",
+    composition: "Central Icon & Hierarchical Enclosure",
+    groundId: "khadi_cloth",
+    desc: "Nathdwara Pichwai sacred lotus waters meeting Bengal Kalighat bold shaded calligraphic contours.",
+    build: (styleA, styleB) => [
       {
         id: uid(),
-        name: "Mithila Sacred Kamala (Lotus)",
+        name: "Pichwai Sacred Kadamba Grove",
         type: "motif",
-        motifId: "mithila_lotus",
+        motifId: "tree_of_life_kalamkari",
         x: 50,
-        y: 84,
-        s: 36,
+        y: 40,
+        s: 70,
         scaleX: 1,
         scaleY: 1,
         r: 0,
@@ -518,48 +508,320 @@ export const CURATED_PRESETS = [
         blendMode: "normal",
         visible: true,
         locked: false,
-        zIndex: 4,
-        source: "Mithila / Madhubani",
+        zIndex: 1,
+        source: "Pichwai",
         category: "botanical",
-        materialAssociation: "Rice Paste & Plant Extracts",
-        color: "#c28822",
-        created: Date.now() - 10000
+        materialAssociation: "Malachite Mineral Green",
+        color: "#1f4835",
+        created: Date.now() - 30000
+      },
+      {
+        id: uid(),
+        name: "Kalighat Shaded Avian Companion",
+        type: "motif",
+        motifId: "kalamkari_peacock",
+        x: 50,
+        y: 65,
+        s: 45,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.95,
+        blendMode: "multiply",
+        visible: true,
+        locked: false,
+        zIndex: 2,
+        source: "Kalighat",
+        category: "figure",
+        materialAssociation: "Carbon Black & Alta Wash",
+        color: "#1b1815",
+        created: Date.now() - 15000
+      }
+    ]
+  },
+  {
+    id: "kangra_mughal_lyricism",
+    name: "07 · Pahari Willow & Mughal Arabesque (Kangra × Mughal)",
+    styleAId: "kangra",
+    styleBId: "mughal",
+    concept: "Lyrical Romance & Mountain Melody",
+    composition: "Symmetrical Sacred Tree & Flanking Guardians",
+    groundId: "handmade_paper",
+    desc: "Himalayan Kangra poetic hill contours enclosed in refined Mughal illuminated margin floral Hashiyas.",
+    build: (styleA, styleB) => [
+      {
+        id: uid(),
+        name: "Mughal Illuminated Margin Hashiya",
+        type: "motif",
+        motifId: "prabhavali_arch",
+        x: 50,
+        y: 50,
+        s: 80,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.85,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 1,
+        source: "Mughal",
+        category: "structural",
+        materialAssociation: "Pure Shell Gold & Lapis",
+        color: "#bfa043",
+        created: Date.now() - 30000
+      },
+      {
+        id: uid(),
+        name: "Kangra Poetic Spring Flora",
+        type: "motif",
+        motifId: "mithila_lotus",
+        x: 50,
+        y: 52,
+        s: 46,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.95,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 2,
+        source: "Kangra",
+        category: "botanical",
+        materialAssociation: "Mountain Lac Crimson",
+        color: "#8b2019",
+        created: Date.now() - 15000
+      }
+    ]
+  },
+  {
+    id: "kerala_bhil_fresco",
+    name: "08 · Panchavarna Fresco & Pointillist Rhythm (Kerala × Bhil)",
+    styleAId: "kerala_mural",
+    styleBId: "bhil",
+    concept: "Pointillist Cosmic Rhythms",
+    composition: "Horror Vacui (Interlocking Negative Space)",
+    groundId: "temple_fresco",
+    desc: "Sinuous Kerala temple wall fresco anatomy filled with joyful Bhil multicolored dotted kinetic fields.",
+    build: (styleA, styleB) => [
+      {
+        id: uid(),
+        name: "Kerala Sinuous Temple Arch",
+        type: "motif",
+        motifId: "kirtimukha_arch",
+        x: 50,
+        y: 35,
+        s: 60,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.9,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 1,
+        source: "Kerala Mural",
+        category: "structural",
+        materialAssociation: "Laterite Red Ochre",
+        color: "#a42918",
+        created: Date.now() - 30000
+      },
+      {
+        id: uid(),
+        name: "Bhil Pointillist Forest Deer",
+        type: "motif",
+        motifId: "gond_deer",
+        x: 50,
+        y: 60,
+        s: 50,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.95,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 2,
+        source: "Bhil",
+        category: "figure",
+        materialAssociation: "Multi-dot Mineral Pigments",
+        color: "#bd2f1f",
+        created: Date.now() - 15000
+      }
+    ]
+  },
+  {
+    id: "roghan_cheriyal_stylus",
+    name: "09 · Mirrored Arabesque & Village Epic (Roghan × Cheriyal)",
+    styleAId: "roghan",
+    styleBId: "cheriyal",
+    concept: "Mythic Journey & Heroic Narrative",
+    composition: "Continuous Horizontal Narrative Band",
+    groundId: "khadi_cloth",
+    desc: "Kutchi Roghan stylus-spun castor oil metallic threads outlining Telangana Cheriyal theatrical red panels.",
+    build: (styleA, styleB) => [
+      {
+        id: uid(),
+        name: "Roghan Mirrored Tree Arabesque",
+        type: "motif",
+        motifId: "tree_of_life_warli",
+        x: 35,
+        y: 50,
+        s: 58,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.92,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 1,
+        source: "Roghan",
+        category: "botanical",
+        materialAssociation: "Castor Oil Metallic Paste",
+        color: "#d1a129",
+        created: Date.now() - 30000
+      },
+      {
+        id: uid(),
+        name: "Cheriyal Folk Epic Steed",
+        type: "motif",
+        motifId: "pabuji_steed",
+        x: 70,
+        y: 52,
+        s: 52,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.95,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 2,
+        source: "Cheriyal",
+        category: "figure",
+        materialAssociation: "Scarlet Red Khadi Wash",
+        color: "#a81f18",
+        created: Date.now() - 15000
+      }
+    ]
+  },
+  {
+    id: "sanjhi_tikuli_gold",
+    name: "10 · Stencil Filigree & Gold Enamel Roundel (Sanjhi × Tikuli)",
+    styleAId: "sanjhi",
+    styleBId: "tikuli",
+    concept: "Negative Space Filigree & Impermanence",
+    composition: "Tantrik Yantra & Concentric Border Framing",
+    groundId: "gold_panel",
+    desc: "Mathura Sanjhi paper-cut negative space lattices centered by radiant Magadha Tikuli gold enamel roundels.",
+    build: (styleA, styleB) => [
+      {
+        id: uid(),
+        name: "Sanjhi Stencil Lotus Mandapa",
+        type: "motif",
+        motifId: "sacred_chowk",
+        x: 50,
+        y: 50,
+        s: 76,
+        scaleX: 1,
+        scaleY: 1,
+        r: 45,
+        opacity: 0.85,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 1,
+        source: "Sanjhi",
+        category: "structural",
+        materialAssociation: "Papercut Filigree Stencil",
+        color: "#1a1612",
+        created: Date.now() - 30000
+      },
+      {
+        id: uid(),
+        name: "Tikuli 22k Gold Enamel Sun Roundel",
+        type: "motif",
+        motifId: "kohbar_sun_moon",
+        x: 50,
+        y: 50,
+        s: 46,
+        scaleX: 1,
+        scaleY: 1,
+        r: 0,
+        opacity: 0.98,
+        blendMode: "normal",
+        visible: true,
+        locked: false,
+        zIndex: 2,
+        source: "Tikuli",
+        category: "symbol",
+        materialAssociation: "22k Gold Leaf Inlay & Lacquer",
+        color: "#d4a737",
+        created: Date.now() - 15000
       }
     ]
   }
 ];
 
-export function createInitialArtwork(styleA, styleB, concept = "Community & Collective Ritual", composition = "Central Icon & Hierarchical Enclosure", groundId = "khadi") {
-  // Check if matching preset exists
-  const matchedPreset = CURATED_PRESETS.find(
-    (p) => (p.styleAId === styleA.id && p.styleBId === styleB.id) || (p.styleAId === styleB.id && p.styleBId === styleA.id)
-  );
+export const evaluateSynthesis = (elements, strokes, styleA, styleB, concept, composition) => {
+  const elemCount = elements.length;
+  const strokeCount = strokes.length;
 
-  if (matchedPreset) {
-    return matchedPreset.build(styleA, styleB);
+  const countA = elements.filter((e) => e.source?.toLowerCase().includes(styleA.name.toLowerCase()) || e.source?.toLowerCase().includes(styleA.id)).length;
+  const countB = elements.filter((e) => e.source?.toLowerCase().includes(styleB.name.toLowerCase()) || e.source?.toLowerCase().includes(styleB.id)).length;
+
+  // Balance between traditions
+  const balanceFactor = elemCount > 0 ? 1 - Math.abs(countA - countB) / elemCount : 0.5;
+  const elementScore = Math.min(40, elemCount * 8);
+  const strokeScore = Math.min(30, strokeCount * 5);
+  const synergyScore = Math.round(balanceFactor * 30);
+
+  const rawScore = elementScore + strokeScore + synergyScore;
+  const finalScore = Math.min(99, Math.max(45, rawScore));
+
+  const radar = {
+    geometry: Math.min(98, 60 + elemCount * 6 + (styleA.matrix?.geometry || 3) * 5),
+    linework: Math.min(98, 55 + strokeCount * 7 + (styleA.matrix?.line || 4) * 6),
+    palette: Math.min(96, 65 + (countA > 0 && countB > 0 ? 25 : 10)),
+    spatial: Math.min(95, 60 + elemCount * 5),
+    safeguards: 94,
+    material: Math.min(98, 70 + (elemCount > 2 ? 20 : 10))
+  };
+
+  let critique = "";
+  if (countA > 0 && countB > 0 && strokeCount > 0) {
+    critique = `Exemplary dual-tradition synthesis. The geometric structural framework of ${styleA.name} seamlessly accommodates the organic expressive motifs of ${styleB.name}, reinforced by authentic calligraphic brushwork.`;
+  } else if (countA > 0 && countB > 0) {
+    critique = `Balanced thematic assembly. Elements from both ${styleA.name} and ${styleB.name} establish a strong dialogical tension. Consider adding traditional brush strokes to connect border transitions.`;
+  } else if (elemCount > 0) {
+    critique = `Promising compositional study. Currently dominated by a single regional visual grammar. Introduce secondary motifs or connective brushwork to achieve full cross-tradition synthesis.`;
+  } else {
+    critique = `Canvas initialized. Begin by selecting motifs from the dual shelves or using traditional digital brushes.`;
   }
 
-  // Dynamic generative fallback for any arbitrary pair
-  return generateDynamicFusion(styleA, styleB, concept, composition);
-}
+  return {
+    score: finalScore,
+    radar,
+    critique,
+    countA,
+    countB,
+    elemCount,
+    strokeCount
+  };
+};
 
-export function generateDynamicFusion(styleA, styleB, concept, composition) {
-  const colorA = styleA.colors[1] || "#82221b";
-  const colorB = styleB.colors[1] || "#16453b";
-  const motifA1 = styleA.motifs[0] || "tarpa_dance";
-  const motifA2 = styleA.motifs[1] || "sacred_chowk";
-  const motifB1 = styleB.motifs[0] || "tree_of_life_kalamkari";
-  const motifB2 = styleB.motifs[1] || "kalamkari_paisley";
-
+export const generateDynamicFusion = (styleA, styleB, concept, composition) => {
   return [
     {
       id: uid(),
-      name: `${styleA.name} Structural Framework`,
+      name: `${styleA.name} Structural Foundation`,
       type: "motif",
-      motifId: motifA2,
+      motifId: "sacred_chowk",
       x: 50,
       y: 50,
-      s: 74,
+      s: 72,
       scaleX: 1,
       scaleY: 1,
       r: 0,
@@ -570,167 +832,133 @@ export function generateDynamicFusion(styleA, styleB, concept, composition) {
       zIndex: 1,
       source: styleA.name,
       category: "structural",
-      materialAssociation: styleA.materials[0],
-      color: colorA,
+      materialAssociation: styleA.materials[0] || "Natural Mineral Ground",
+      color: styleA.colors[1] || "#82221b",
       created: Date.now() - 30000
     },
     {
       id: uid(),
-      name: `${styleB.name} Transformative Foliage`,
+      name: `${styleB.name} Botanical Accent`,
       type: "motif",
-      motifId: motifB1,
-      x: 25,
-      y: 48,
-      s: 44,
-      scaleX: 1,
-      scaleY: 1,
-      r: -6,
-      opacity: 0.92,
-      blendMode: "multiply",
-      visible: true,
-      locked: false,
-      zIndex: 2,
-      source: styleB.name,
-      category: "botanical",
-      materialAssociation: styleB.materials[0],
-      color: colorB,
-      created: Date.now() - 20000
-    },
-    {
-      id: uid(),
-      name: `${styleB.name} Accent Medallion`,
-      type: "motif",
-      motifId: motifB2,
-      x: 75,
-      y: 48,
-      s: 44,
-      scaleX: -1,
-      scaleY: 1,
-      r: 6,
-      opacity: 0.92,
-      blendMode: "multiply",
-      visible: true,
-      locked: false,
-      zIndex: 3,
-      source: styleB.name,
-      category: "symbol",
-      materialAssociation: styleB.materials[1] || styleB.materials[0],
-      color: colorB,
-      created: Date.now() - 15000
-    },
-    {
-      id: uid(),
-      name: `${styleA.name} Iconic Centerpiece`,
-      type: "motif",
-      motifId: motifA1,
+      motifId: "tree_of_life_kalamkari",
       x: 50,
       y: 52,
       s: 48,
       scaleX: 1,
       scaleY: 1,
       r: 0,
-      opacity: 0.98,
+      opacity: 0.95,
       blendMode: "normal",
       visible: true,
       locked: false,
-      zIndex: 4,
+      zIndex: 2,
+      source: styleB.name,
+      category: "botanical",
+      materialAssociation: styleB.materials[0] || "Natural Pigment Wash",
+      color: styleB.colors[1] || "#16453b",
+      created: Date.now() - 15000
+    }
+  ];
+};
+
+export const createInitialArtwork = (styleA, styleB, concept, composition, groundId) => {
+  return [
+    {
+      id: uid(),
+      name: `${styleA.name} Structural Base`,
+      type: "motif",
+      motifId: "sacred_chowk",
+      x: 50,
+      y: 50,
+      s: 75,
+      scaleX: 1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.85,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 1,
       source: styleA.name,
-      category: "figure",
-      materialAssociation: styleA.materials[0],
-      color: colorA,
+      category: "structural",
+      materialAssociation: styleA.materials[0] || "Ground Support",
+      color: styleA.colors[1] || "#82221b",
+      created: Date.now() - 20000
+    },
+    {
+      id: uid(),
+      name: `${styleB.name} Organic Flourish`,
+      type: "motif",
+      motifId: "tree_of_life_kalamkari",
+      x: 50,
+      y: 52,
+      s: 46,
+      scaleX: 1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.95,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 2,
+      source: styleB.name,
+      category: "botanical",
+      materialAssociation: styleB.materials[0] || "Pigment Wash",
+      color: styleB.colors[1] || "#16453b",
       created: Date.now() - 10000
     }
   ];
-}
+};
 
-export function evaluateSynthesis(elements = [], strokes = [], styleA, styleB, concept, composition) {
-  if (!styleA || !styleB) {
-    return { balance: 70, diversity: 70, coherence: 70, documentation: 80, compatibility: 85 };
-  }
-
-  const countA = elements.filter((e) => e.source === styleA.name).length;
-  const countB = elements.filter((e) => e.source === styleB.name).length;
-  const studentStrokes = strokes.length;
-
-  // 1. Balance between source traditions (100 is perfectly even)
-  const totalSources = countA + countB;
-  let balance = 50;
-  if (totalSources > 0) {
-    const ratio = Math.min(countA, countB) / Math.max(countA, countB);
-    balance = Math.round(55 + ratio * 40);
-  }
-
-  // 2. Diversity of motif categories (structural, botanical, figure, symbol, brushwork)
-  const categories = new Set(elements.map((e) => e.category));
-  if (studentStrokes > 0) categories.add("freehand");
-  const diversity = Math.min(98, 45 + categories.size * 13);
-
-  // 3. Structural Coherence (compositional balance)
-  const coherence = Math.min(99, 60 + Math.min(elements.length, 6) * 5 + (studentStrokes > 0 ? 8 : 0));
-
-  // 4. Material & Grammar Compatibility from Matrix
-  const matrixA = styleA.matrix || { line: 4, geometry: 4 };
-  const matrixB = styleB.matrix || { line: 4, geometry: 4 };
-  const diffGeo = Math.abs(matrixA.geometry - matrixB.geometry);
-  const compScore = Math.min(99, 70 + (5 - diffGeo) * 5 + Math.min(matrixA.line, matrixB.line) * 2);
-
-  return {
-    balance: Math.min(99, balance),
-    diversity: Math.min(99, diversity),
-    coherence: Math.min(99, coherence),
-    compatibility: Math.min(99, compScore),
-    documentation: 92
-  };
-}
-
-export function generateCuratorCritique(elements, strokes, styleA, styleB, concept, composition, score) {
-  const countA = elements.filter((e) => e.source === styleA.name).length;
-  const countB = elements.filter((e) => e.source === styleB.name).length;
-  const strokeCount = strokes.length;
-
-  let critique = "";
-  let tag = "Harmonious Synthesis";
-
-  if (countA === 0 || countB === 0) {
-    tag = "Unequal Representation";
-    critique = `The current study heavily privileges ${countA === 0 ? styleB.name : styleA.name}. To achieve authentic synthesis rather than an isolated study, introduce key structural or decorative principles from ${countA === 0 ? styleA.name : styleB.name} into the shared visual field.`;
-  } else if (Math.abs(countA - countB) >= 3) {
-    tag = "Dominant Hierarchy";
-    critique = `While both ${styleA.name} and ${styleB.name} are present, ${countA > countB ? styleA.name : styleB.name} is visually dominant. Consider allowing ${countA > countB ? styleB.name : styleA.name}'s motifs to serve as the framing structure or internal texture to create higher compositional equilibrium.`;
-  } else if (score.diversity < 65) {
-    tag = "Uniform Grammar";
-    critique = `Good initial dialogue between ${styleA.name} and ${styleB.name}, but the artwork is primarily using one category of elements. Try incorporating contrasting botanical vines or structural enclosures alongside the figurative elements.`;
-  } else {
-    tag = "Exemplary Synthesis";
-    critique = `Strong visual dialogue. The geometric economy of ${styleA.name} and the intricate ornamental vocabulary of ${styleB.name} inhabit a unified spatial field under '${composition}'. The integration of ${strokeCount > 0 ? `direct freehand brushwork (${strokeCount} strokes) with ` : ""}curated motif studies creates an original, defensible student transformation.`;
-  }
-
-  return { tag, critique };
-}
-
-export function formatTimestamp(time = Date.now()) {
-  const d = new Date(time);
+export const formatTimestamp = (ts = Date.now()) => {
+  const d = new Date(ts);
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-}
+};
 
-export const STORAGE_KEY = "synthesis_atelier_v2_project";
-
-export function saveProjectToLocalStorage(projectData) {
+export const saveProjectToLocalStorage = (data) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...projectData, lastAutosaved: Date.now() }));
-    return true;
+    localStorage.setItem("synthesis_active_project_v2", JSON.stringify(data));
   } catch (err) {
-    console.error("Autosave error:", err);
-    return false;
+    console.warn("Autosave storage full", err);
   }
-}
+};
 
-export function loadProjectFromLocalStorage() {
+export const generateCuratorCritique = (elements, strokes, styleA, styleB, concept, composition) => {
+  const elemCount = elements.length;
+  const strokeCount = strokes.length;
+  const countA = elements.filter((e) => e.source?.toLowerCase().includes(styleA.name.toLowerCase()) || e.source?.toLowerCase().includes(styleA.id)).length;
+  const countB = elements.filter((e) => e.source?.toLowerCase().includes(styleB.name.toLowerCase()) || e.source?.toLowerCase().includes(styleB.id)).length;
+
+  if (countA > 0 && countB > 0 && strokeCount > 0) {
+    return {
+      tag: "EXEMPLARY SYNTHESIS",
+      critique: `Masterful cross-regional synthesis. The geometric structural framework of ${styleA.name} seamlessly accommodates the organic expressive motifs of ${styleB.name}, reinforced by authentic calligraphic brushwork.`
+    };
+  } else if (countA > 0 && countB > 0) {
+    return {
+      tag: "HARMONIC BALANCED ASSEMBLY",
+      critique: `Balanced thematic assembly. Elements from both ${styleA.name} and ${styleB.name} establish a strong dialogical tension. Consider adding traditional brush strokes to connect border transitions.`
+    };
+  } else if (elemCount > 0) {
+    return {
+      tag: "EMERGING STUDY",
+      critique: `Composition currently dominated by a single regional visual grammar. Introduce secondary motifs or connective brushwork to achieve full cross-tradition synthesis.`
+    };
+  } else {
+    return {
+      tag: "INITIALIZED ATELIER",
+      critique: `Canvas ready for composition. Begin by selecting motifs from the dual shelves or using traditional digital brushes.`
+    };
+  }
+};
+
+export const loadProjectFromLocalStorage = () => {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem("synthesis_active_project_v2");
     return raw ? JSON.parse(raw) : null;
   } catch (err) {
-    console.error("Load error:", err);
     return null;
   }
-}
+};
+
+
