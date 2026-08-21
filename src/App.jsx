@@ -246,11 +246,10 @@ export default function App() {
   const handleSelectStyleA = (newStyle) => {
     if (!newStyle || newStyle.id === styleA.id) return;
     setStyleA(newStyle);
-    const initial = createInitialArtwork(newStyle, styleB, concept, composition, groundId);
-    setElements(initial);
-    setStrokes([]);
     setStrokeColor(newStyle.colors[1] || "#82221b");
-    setActivePresetId("custom");
+    const generated = generateDynamicFusion(newStyle, styleB, concept, composition);
+    setElements(generated);
+    setSelectedId(generated[0]?.id || null);
     recordMilestone(`Selected ${newStyle.name} as Primary Source`);
   };
 
@@ -258,11 +257,18 @@ export default function App() {
   const handleSelectStyleB = (newStyle) => {
     if (!newStyle || newStyle.id === styleB.id) return;
     setStyleB(newStyle);
-    const initial = createInitialArtwork(styleA, newStyle, concept, composition, groundId);
-    setElements(initial);
-    setStrokes([]);
-    setActivePresetId("custom");
+    const generated = generateDynamicFusion(styleA, newStyle, concept, composition);
+    setElements(generated);
+    setSelectedId(generated[1]?.id || null);
     recordMilestone(`Selected ${newStyle.name} as Secondary Source`);
+  };
+
+  // Synthesize Current Pair
+  const handleSynthesizePair = () => {
+    const generated = generateDynamicFusion(styleA, styleB, concept, composition);
+    setElements(generated);
+    setSelectedId(generated[0]?.id || null);
+    recordMilestone(`Synthesized ${styleA.name} × ${styleB.name}`);
   };
 
   // Add Motif to Canvas
@@ -534,6 +540,10 @@ export default function App() {
                       ))}
                     </select>
                   </div>
+
+                  <button className="gold-btn synthesize-pair-btn" onClick={handleSynthesizePair} title="Synthesize hybrid composition from Tradition 1 and Tradition 2">
+                    <Sparkles size={14} /> <b>SYNTHESIZE PAIR</b>
+                  </button>
                 </div>
               </section>
 

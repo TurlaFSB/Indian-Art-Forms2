@@ -1,3 +1,5 @@
+import { MOTIF_STUDIES } from "../data/motifs";
+
 /**
  * SYNTHESIS — Core Mathematical, Synthesis Diagnostic, 20 Masterpiece Preset Library & Serialization Engine
  */
@@ -813,37 +815,49 @@ export const evaluateSynthesis = (elements, strokes, styleA, styleB, concept, co
 };
 
 export const generateDynamicFusion = (styleA, styleB, concept, composition) => {
+  const motifsA = MOTIF_STUDIES.filter((m) => m.tradition === styleA.id);
+  const motifsB = MOTIF_STUDIES.filter((m) => m.tradition === styleB.id);
+
+  const baseA = motifsA[0] || { id: "sacred_chowk", name: "Structural Form", category: "structural", defaultScale: 60 };
+  const accentB = motifsB[0] || { id: "tree_of_life_kalamkari", name: "Botanical Form", category: "botanical", defaultScale: 48 };
+  const secondaryA = motifsA[1] || motifsA[0] || baseA;
+  const secondaryB = motifsB[1] || motifsB[0] || accentB;
+
+  const colorA = styleA.colors[1] || styleA.colors[0] || "#82221b";
+  const colorB = styleB.colors[1] || styleB.colors[2] || "#16453b";
+  const accentColorA = styleA.colors[2] || styleA.colors[0] || "#d89c28";
+
   return [
     {
       id: uid(),
-      name: `${styleA.name} Structural Foundation`,
+      name: `${styleA.name} ${baseA.name}`,
       type: "motif",
-      motifId: "sacred_chowk",
-      x: 50,
+      motifId: baseA.id,
+      x: 35,
       y: 50,
-      s: 72,
+      s: Math.round((baseA.defaultScale || 40) * 1.5),
       scaleX: 1,
       scaleY: 1,
       r: 0,
-      opacity: 0.85,
+      opacity: 0.9,
       blendMode: "normal",
       visible: true,
       locked: false,
       zIndex: 1,
       source: styleA.name,
-      category: "structural",
+      category: baseA.category || "structural",
       materialAssociation: styleA.materials[0] || "Natural Mineral Ground",
-      color: styleA.colors[1] || "#82221b",
+      color: colorA,
       created: Date.now() - 30000
     },
     {
       id: uid(),
-      name: `${styleB.name} Botanical Accent`,
+      name: `${styleB.name} ${accentB.name}`,
       type: "motif",
-      motifId: "tree_of_life_kalamkari",
-      x: 50,
-      y: 52,
-      s: 48,
+      motifId: accentB.id,
+      x: 68,
+      y: 50,
+      s: Math.round((accentB.defaultScale || 40) * 1.4),
       scaleX: 1,
       scaleY: 1,
       r: 0,
@@ -853,61 +867,38 @@ export const generateDynamicFusion = (styleA, styleB, concept, composition) => {
       locked: false,
       zIndex: 2,
       source: styleB.name,
-      category: "botanical",
+      category: accentB.category || "botanical",
       materialAssociation: styleB.materials[0] || "Natural Pigment Wash",
-      color: styleB.colors[1] || "#16453b",
-      created: Date.now() - 15000
+      color: colorB,
+      created: Date.now() - 20000
+    },
+    {
+      id: uid(),
+      name: `${styleA.name} Accent (${secondaryA.name})`,
+      type: "motif",
+      motifId: secondaryA.id,
+      x: 50,
+      y: 75,
+      s: Math.round((secondaryA.defaultScale || 36) * 1.1),
+      scaleX: 1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.88,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 3,
+      source: styleA.name,
+      category: secondaryA.category || "symbol",
+      materialAssociation: styleA.materials[1] || "Natural Wash",
+      color: accentColorA,
+      created: Date.now() - 10000
     }
   ];
 };
 
 export const createInitialArtwork = (styleA, styleB, concept, composition, groundId) => {
-  return [
-    {
-      id: uid(),
-      name: `${styleA.name} Structural Base`,
-      type: "motif",
-      motifId: "sacred_chowk",
-      x: 50,
-      y: 50,
-      s: 75,
-      scaleX: 1,
-      scaleY: 1,
-      r: 0,
-      opacity: 0.85,
-      blendMode: "normal",
-      visible: true,
-      locked: false,
-      zIndex: 1,
-      source: styleA.name,
-      category: "structural",
-      materialAssociation: styleA.materials[0] || "Ground Support",
-      color: styleA.colors[1] || "#82221b",
-      created: Date.now() - 20000
-    },
-    {
-      id: uid(),
-      name: `${styleB.name} Organic Flourish`,
-      type: "motif",
-      motifId: "tree_of_life_kalamkari",
-      x: 50,
-      y: 52,
-      s: 46,
-      scaleX: 1,
-      scaleY: 1,
-      r: 0,
-      opacity: 0.95,
-      blendMode: "normal",
-      visible: true,
-      locked: false,
-      zIndex: 2,
-      source: styleB.name,
-      category: "botanical",
-      materialAssociation: styleB.materials[0] || "Pigment Wash",
-      color: styleB.colors[1] || "#16453b",
-      created: Date.now() - 10000
-    }
-  ];
+  return generateDynamicFusion(styleA, styleB, concept, composition);
 };
 
 export const formatTimestamp = (ts = Date.now()) => {
