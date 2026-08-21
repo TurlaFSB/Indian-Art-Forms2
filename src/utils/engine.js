@@ -818,24 +818,124 @@ export const generateDynamicFusion = (styleA, styleB, concept, composition) => {
   const motifsA = MOTIF_STUDIES.filter((m) => m.tradition === styleA.id);
   const motifsB = MOTIF_STUDIES.filter((m) => m.tradition === styleB.id);
 
-  const baseA = motifsA[0] || { id: "sacred_chowk", name: "Structural Form", category: "structural", defaultScale: 60 };
-  const accentB = motifsB[0] || { id: "tree_of_life_kalamkari", name: "Botanical Form", category: "botanical", defaultScale: 48 };
-  const secondaryA = motifsA[1] || motifsA[0] || baseA;
-  const secondaryB = motifsB[1] || motifsB[0] || accentB;
+  // 1. Structural / Botanical Framework
+  const structuralA = motifsA.find((m) => m.category === "structural" || m.category === "botanical") || motifsA[0] || { id: "sacred_chowk", name: "Sacred Enclosure", category: "structural", defaultScale: 60 };
+  
+  // 2. Primary Focal Hero Motif
+  const heroA = motifsA.find((m) => m.category === "figure" || m.category === "symbol") || motifsA[1] || motifsA[0] || structuralA;
+  
+  // 3. Secondary Complementary Motif
+  const heroB = motifsB.find((m) => m.category === "figure" || m.category === "botanical") || motifsB[0] || { id: "tree_of_life_kalamkari", name: "Botanical Form", category: "botanical", defaultScale: 48 };
+  
+  // 4. Celestial Canopy / Crown Motif
+  const crownB = motifsB.find((m) => m.category === "symbol" || m.category === "structural") || motifsB[1] || motifsA.find((m) => m.category === "symbol") || { id: "kalamkari_paisley", name: "Paisley Canopy", category: "symbol", defaultScale: 36 };
+  
+  // 5. Earth / Lotus Base Flourish
+  const baseFlourish = motifsA.find((m) => m.category === "botanical") || motifsB.find((m) => m.category === "botanical") || { id: "mithila_lotus", name: "Sacred Lotus", category: "botanical", defaultScale: 38 };
 
-  const colorA = styleA.colors[1] || styleA.colors[0] || "#82221b";
-  const colorB = styleB.colors[1] || styleB.colors[2] || "#16453b";
-  const accentColorA = styleA.colors[2] || styleA.colors[0] || "#d89c28";
+  const colorA_primary = styleA.colors[1] || styleA.colors[0] || "#82221b";
+  const colorA_accent = styleA.colors[2] || styleA.colors[0] || "#d89c28";
+  const colorB_primary = styleB.colors[1] || styleB.colors[0] || "#16453b";
+  const colorB_accent = styleB.colors[2] || styleB.colors[3] || "#c49232";
+  const color_deep = styleA.colors[3] || styleB.colors[3] || "#1c1813";
 
   return [
     {
       id: uid(),
-      name: `${styleA.name} ${baseA.name}`,
+      name: `${styleA.name} ${structuralA.name} (Sanctum Framework)`,
       type: "motif",
-      motifId: baseA.id,
-      x: 35,
+      motifId: structuralA.id,
+      x: 50,
       y: 50,
-      s: Math.round((baseA.defaultScale || 40) * 1.5),
+      s: 78,
+      scaleX: 1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.85,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 1,
+      source: styleA.name,
+      category: structuralA.category || "structural",
+      materialAssociation: styleA.materials[0] || "Natural Ground Support",
+      color: colorA_primary,
+      created: Date.now() - 40000
+    },
+    {
+      id: uid(),
+      name: `${styleA.name} ${heroA.name} (Primary Figure)`,
+      type: "motif",
+      motifId: heroA.id,
+      x: 36,
+      y: 52,
+      s: Math.round((heroA.defaultScale || 40) * 1.35),
+      scaleX: 1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.96,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 2,
+      source: styleA.name,
+      category: heroA.category || "figure",
+      materialAssociation: styleA.materials[1] || "Authentic Mineral Pigment",
+      color: color_deep,
+      created: Date.now() - 30000
+    },
+    {
+      id: uid(),
+      name: `${styleB.name} ${heroB.name} (Harmonic Partner)`,
+      type: "motif",
+      motifId: heroB.id,
+      x: 65,
+      y: 52,
+      s: Math.round((heroB.defaultScale || 40) * 1.35),
+      scaleX: -1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.96,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 3,
+      source: styleB.name,
+      category: heroB.category || "figure",
+      materialAssociation: styleB.materials[1] || "Natural Dye Pigment",
+      color: colorB_primary,
+      created: Date.now() - 20000
+    },
+    {
+      id: uid(),
+      name: `${styleB.name} ${crownB.name} (Celestial Canopy)`,
+      type: "motif",
+      motifId: crownB.id,
+      x: 50,
+      y: 20,
+      s: 34,
+      scaleX: 1,
+      scaleY: 1,
+      r: 0,
+      opacity: 0.92,
+      blendMode: "normal",
+      visible: true,
+      locked: false,
+      zIndex: 4,
+      source: styleB.name,
+      category: crownB.category || "symbol",
+      materialAssociation: styleB.materials[0] || "Natural Pigment Wash",
+      color: colorB_accent,
+      created: Date.now() - 15000
+    },
+    {
+      id: uid(),
+      name: `${styleA.name} ${baseFlourish.name} (Terrestrial Base)`,
+      type: "motif",
+      motifId: baseFlourish.id,
+      x: 50,
+      y: 80,
+      s: 38,
       scaleX: 1,
       scaleY: 1,
       r: 0,
@@ -843,55 +943,11 @@ export const generateDynamicFusion = (styleA, styleB, concept, composition) => {
       blendMode: "normal",
       visible: true,
       locked: false,
-      zIndex: 1,
+      zIndex: 5,
       source: styleA.name,
-      category: baseA.category || "structural",
-      materialAssociation: styleA.materials[0] || "Natural Mineral Ground",
-      color: colorA,
-      created: Date.now() - 30000
-    },
-    {
-      id: uid(),
-      name: `${styleB.name} ${accentB.name}`,
-      type: "motif",
-      motifId: accentB.id,
-      x: 68,
-      y: 50,
-      s: Math.round((accentB.defaultScale || 40) * 1.4),
-      scaleX: 1,
-      scaleY: 1,
-      r: 0,
-      opacity: 0.95,
-      blendMode: "normal",
-      visible: true,
-      locked: false,
-      zIndex: 2,
-      source: styleB.name,
-      category: accentB.category || "botanical",
-      materialAssociation: styleB.materials[0] || "Natural Pigment Wash",
-      color: colorB,
-      created: Date.now() - 20000
-    },
-    {
-      id: uid(),
-      name: `${styleA.name} Accent (${secondaryA.name})`,
-      type: "motif",
-      motifId: secondaryA.id,
-      x: 50,
-      y: 75,
-      s: Math.round((secondaryA.defaultScale || 36) * 1.1),
-      scaleX: 1,
-      scaleY: 1,
-      r: 0,
-      opacity: 0.88,
-      blendMode: "normal",
-      visible: true,
-      locked: false,
-      zIndex: 3,
-      source: styleA.name,
-      category: secondaryA.category || "symbol",
-      materialAssociation: styleA.materials[1] || "Natural Wash",
-      color: accentColorA,
+      category: baseFlourish.category || "botanical",
+      materialAssociation: styleA.materials[1] || "Natural Pigment",
+      color: colorA_accent,
       created: Date.now() - 10000
     }
   ];
